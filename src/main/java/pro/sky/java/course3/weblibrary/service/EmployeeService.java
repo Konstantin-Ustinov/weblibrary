@@ -1,11 +1,16 @@
 package pro.sky.java.course3.weblibrary.service;
 
+import org.springframework.stereotype.Service;
 import pro.sky.java.course3.weblibrary.db.EmployeeBook;
 import pro.sky.java.course3.weblibrary.entities.Employee;
 
+import java.util.LinkedList;
+import java.util.List;
+
+@Service
 public class EmployeeService {
-    static EmployeeBook employeeBook = new EmployeeBook();
-    public static void firstFillingEmployees() {
+    private EmployeeBook employeeBook = new EmployeeBook();
+    public void firstFillingEmployees() {
         Employee[] employees = new Employee[10];
 
         Employee employee = new Employee("John Adam Smith", "1", 50_000);
@@ -32,52 +37,48 @@ public class EmployeeService {
         employeeBook.setEmployees(employees);
     }
 
-    public static String showAll(String department) {
+    public List<Employee> showAll(String department) {
         Employee[] employees = employeeBook.getEmployees();
-        StringBuilder sb = new StringBuilder();
+        List<Employee> sb = new LinkedList<>();
         if (department == null) {
-            for (int list = 1, i = 0; i < employees.length; i++) {
+            for (int i = 0; i < employees.length; i++) {
                 if (employees[i] != null) {
-                    sb.append(list).append("). ").append(employees[i].toString()).append("\n");
-                    list++;
+                    sb.add(employees[i]);
                 }
             }
         } else {
-            for (int list = 1, i = 0; i < employees.length; i++) {
+            for (int i = 0; i < employees.length; i++) {
                 if (employees[i] != null && employees[i].getDepartment().equals(department)) {
-                    sb.append(list).append("). ").append(employees[i].toStringWithoutDepartment()).append("\n");
-                    list++;
+                    sb.add(employees[i]);
                 }
             }
         }
-        return sb.length() > 0 ? sb.toString() : "Сотрудников в таком департаменте нет";
+        return sb;
     }
 
-    public static String showAllSalaryLessLimit(double limit) {
+    public List<Employee> showAllSalaryLessLimit(double limit) {
         Employee[] employees = employeeBook.getEmployees();
-        StringBuilder sb = new StringBuilder();
-        for (int list = 1, i = 0; i < employees.length; i++) {
-            if (employees[i] != null && employees[i].getSalary() < limit) {
-                sb.append(list).append("). ").append(employees[i].toString()).append("\n");
-               list++;
-           }
+        List<Employee> sb = new LinkedList<>();
+        for (Employee employee : employees) {
+            if (employee != null && employee.getSalary() < limit) {
+                sb.add(employee);
+            }
         }
-        return sb.toString();
+        return sb;
     }
 
-    public static String showAllSalaryMoreLimit(double limit) {
+    public List<Employee> showAllSalaryMoreLimit(double limit) {
         Employee[] employees = employeeBook.getEmployees();
-        StringBuilder sb = new StringBuilder();
-        for (int list = 1, i = 0; i < employees.length; i++) {
-            if (employees[i] != null && employees[i].getSalary() >= limit) {
-                sb.append(list).append("). ").append(employees[i].toString()).append("\n");
-               list++;
-           }
+        List<Employee> sb = new LinkedList<>();
+        for (Employee employee : employees) {
+            if (employee != null && employee.getSalary() >= limit) {
+                sb.add(employee);
+            }
         }
-        return sb.toString();
+        return sb;
     }
 
-    public static int sumAllSalary(String department) {
+    public int sumAllSalary(String department) {
         Employee[] employees = employeeBook.getEmployees();
         int sum = 0;
         for (int i = 0; i < employees.length; i++) {
@@ -92,16 +93,16 @@ public class EmployeeService {
         return sum;
     }
 
-    public static double findMinSalary(String department) {
+    public Employee findMinSalaryEmployee(String department) {
         Employee[] employees = employeeBook.getEmployees();
-        double min = employees[0].getSalary();
+        Employee min = employees[0];
         for (int i = 1; i < employees.length; i++) {
             if (employees[i] != null) {
-                if (min > employees[i].getSalary()) {
+                if (min.getSalary() > employees[i].getSalary()) {
                     if (department == null) {
-                        min = employees[i].getSalary();
+                        min = employees[i];
                     } else if (employees[i].getDepartment().equals(department)) {
-                        min = employees[i].getSalary();
+                        min = employees[i];
                     }
                 }
             }
@@ -109,16 +110,16 @@ public class EmployeeService {
         return min;
     }
 
-    public static double findMaxSalary(String department) {
+    public Employee findMaxSalaryEmployee(String department) {
         Employee[] employees = employeeBook.getEmployees();
-        double max = employees[0].getSalary();
+        Employee max = employees[0];
         for (int i = 1; i < employees.length; i++) {
             if (employees[i] != null) {
-                if (max < employees[i].getSalary()) {
+                if (max.getSalary() < employees[i].getSalary()) {
                     if (department == null) {
-                        max = employees[i].getSalary();
+                        max = employees[i];
                     } else if (employees[i].getDepartment().equals(department)) {
-                        max = employees[i].getSalary();
+                        max = employees[i];
                     }
                 }
             }
@@ -126,7 +127,7 @@ public class EmployeeService {
         return max;
     }
 
-    public static String findAllSalaryMoreAverage(String department) {
+    public String findAllSalaryMoreAverage(String department) {
         Employee[] employees = employeeBook.getEmployees();
         StringBuilder sb = new StringBuilder();
         for (int list = 1, i = 0; i < employees.length; i++) {
@@ -138,12 +139,12 @@ public class EmployeeService {
         return sb.toString();
     }
 
-    public static double findAverageSalary(String department) {
+    public double findAverageSalary(String department) {
         double sum = sumAllSalary(department);
         return sum / numberOfEmployees(department);
     }
 
-    public static String showAllFio() {
+    public String showAllFio() {
         Employee[] employees = employeeBook.getEmployees();
         StringBuilder sb = new StringBuilder();
         for (int list = 1, i = 0; i < employees.length; i++) {
@@ -155,7 +156,7 @@ public class EmployeeService {
         return sb.toString();
     }
 
-    public static boolean riseSalary(String department, int percent) {
+    public boolean riseSalary(String department, int percent) {
         Employee[] employees = employeeBook.getEmployees();
         for (int i = 0; i < employees.length; i++) {
             if (employees[i] != null && department.equals("all")) {
@@ -168,24 +169,24 @@ public class EmployeeService {
         return true;
     }
 
-    public static boolean addEmployee(String fio, String department, int salary) {
+    public boolean addEmployee(String fio, String department, int salary) {
         Employee newEmployee = new Employee(fio, department, salary);
         return employeeBook.add(newEmployee);
     }
 
-    public static boolean deleteEmployee(int id) {
+    public boolean deleteEmployee(int id) {
         return employeeBook.delete(id);
     }
 
-    public static boolean setSalary(int id, int salary) {
+    public boolean setSalary(int id, int salary) {
         return employeeBook.setSalary(id, salary);
     }
 
-    public static boolean setDepartment(int id, String department) {
+    public boolean setDepartment(int id, String department) {
         return employeeBook.setDepartment(id, department);
     }
 
-    private static int numberOfEmployees(String department) {
+    private int numberOfEmployees(String department) {
         Employee[] employees = employeeBook.getEmployees();
         int num = 0;
         for (int i = 1; i < employees.length; i++) {
@@ -198,7 +199,7 @@ public class EmployeeService {
         return num;
     }
 
-    public static String pluralizeRubles(int num) {
+    public String pluralizeRubles(int num) {
         int end10 = num%10;
         int end100 = num%100;
 

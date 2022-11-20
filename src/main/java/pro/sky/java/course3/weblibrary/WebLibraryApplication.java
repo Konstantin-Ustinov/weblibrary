@@ -8,7 +8,6 @@ import pro.sky.java.course3.weblibrary.service.EmployeeService;
 public class WebLibraryApplication {
 
     public static void main(String[] args) {
-        EmployeeService.firstFillingEmployees();
         SpringApplication.run(WebLibraryApplication.class, args);
     }
 
