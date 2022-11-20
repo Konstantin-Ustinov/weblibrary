@@ -1,6 +1,9 @@
 package pro.sky.java.course3.weblibrary.service;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import pro.sky.java.course3.weblibrary.db.EmployeeBook;
 import pro.sky.java.course3.weblibrary.entities.Employee;
 
@@ -169,8 +172,15 @@ public class EmployeeService {
         return true;
     }
 
-    public boolean addEmployee(String fio, String department, int salary) {
-        Employee newEmployee = new Employee(fio, department, salary);
+    public boolean addEmployee(String name, String department, int salary) {
+
+        if (!StringUtils.isAlpha(name)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Имя должено содержать только текст");
+        } else {
+            name = StringUtils.capitalize(name);
+        }
+
+        Employee newEmployee = new Employee(name, department, salary);
         return employeeBook.add(newEmployee);
     }
 

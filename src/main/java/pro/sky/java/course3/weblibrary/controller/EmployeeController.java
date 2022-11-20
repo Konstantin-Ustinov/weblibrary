@@ -47,4 +47,9 @@ public class EmployeeController {
     public List<Employee> showAllSalaryMoreLimit(@RequestParam double limit) {
         return employeeService.showAllSalaryMoreLimit(limit);
     }
+
+    @GetMapping("/add-new-employee")
+    public String addNewEmployee(@RequestParam String name, String department, int salary) {
+        return employeeService.addEmployee(name, department, salary) ? "Сотрудник успешно добавлен" : "Ошибка при добавлении сотрудника";
+    }
 }
