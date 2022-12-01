@@ -1,8 +1,10 @@
-package pro.sky.java.course3.weblibrary.db;
+package pro.sky.java.course3.weblibrary.repository;
 
+import org.springframework.stereotype.Repository;
 import pro.sky.java.course3.weblibrary.entities.Employee;
 
-public class EmployeeBook {
+@Repository
+public class EmployeeBookImpl implements EmployeeBook {
     private Employee[] employees = new Employee[10];
 
     public Employee[] getEmployees() {

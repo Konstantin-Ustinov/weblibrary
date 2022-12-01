@@ -7,7 +7,7 @@ public class Employee {
     private int id;
     private String fio;
     private String department;
-    private double salary;
+    private int salary;
 
     public Employee(String fio, String department, int salary) {
         this.id = commonId++;
@@ -28,7 +28,7 @@ public class Employee {
         return department;
     }
 
-    public double getSalary() {
+    public int getSalary() {
         return salary;
     }
 
@@ -36,7 +36,7 @@ public class Employee {
         this.department = department;
     }
 
-    public void setSalary(double salary) {
+    public void setSalary(int salary) {
         this.salary = salary;
     }
 
